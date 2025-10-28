@@ -7,7 +7,7 @@
       key = "ssh_public_key";
       owner = "root";
       group = "root";
-      mode = "0400";
+      mode = "0644";
     };
   };
 
@@ -23,9 +23,11 @@
     };
   };
 
-  users.users.${USERNAME}.openssh.authorizedKeys.keys = [
-    config.sops.secrets.ssh_public_key.path
-  ];
+  system.activationScripts."zz-${USERNAME}-authorizedKeys".text = ''
+    mkdir -p "/etc/ssh/authorized_keys.d";
+    cp "${config.sops.secrets.ssh_public_key.path}" "/etc/ssh/authorized_keys.d/${USERNAME}";
+    chmod +r "/etc/ssh/authorized_keys.d/${USERNAME}"
+  '';
 
   networking.firewall.allowedTCPPorts = [ SSH_PORT ];
 

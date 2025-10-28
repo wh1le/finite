@@ -24,6 +24,13 @@ Install Sops and generate your keys. Then edit secrets:
 sops secrets/default.yaml
 ```
 
+User password needs to be in hash form user this:
+
+```
+mkpasswd -m sha-512 "your password"
+# put output to secrets/default.yaml
+```
+
 Adjust defaults in flake.nix:
 
 - USERNAME - your user name
