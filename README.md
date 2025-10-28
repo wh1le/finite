@@ -1,6 +1,6 @@
 # Finite
 
-Pi-hole and Unbound configuration for Rasbery PI using NixOS
+Pi-hole and Unbound configuration for Raspberry PI using NixOS
 
 ## Building steps
 
@@ -29,3 +29,16 @@ Write image to SD card:
 # User lsblk -f to find your card or flashdrive path
 $ sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_drive bs=4M status=progress conv=fsync
 ```
+
+## Notes
+
+I tested this build on Raspberry PI 3 B+ and it works flawlessly. Let me know how it runs on thers version of PI.
+
+## Work in progress
+
+- [ ] Configure Raspberry PI filters
+- [ ] Add logo
+
+## License
+
+MIT © 2025 Nikita — see [LICENSE](./LICENSE) for details.
