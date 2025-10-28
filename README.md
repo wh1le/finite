@@ -41,4 +41,4 @@ I tested this build on Raspberry PI 3 B+ and it works flawlessly. Let me know ho
 
 ## License
 
-MIT © 2025 Nikita — see [LICENSE](./LICENSE) for details.
+MIT © 2025 Nikita Miloserdov — see [LICENSE](./LICENSE) for details.
