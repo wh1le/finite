@@ -15,13 +15,14 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./hardware-configuration.nix
 
+    ./modules/sops.nix
+
     ./modules/image.nix
     ./modules/network.nix
     ./modules/system.nix
     ./modules/ssh.nix
     ./modules/unbound.nix
     ./modules/user.nix
-    ./modules/sops.nix
     ./modules/virtualisation.nix
     ./modules/firewall.nix
     ./modules/locales.nix

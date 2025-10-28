@@ -23,7 +23,7 @@
       plugins = [ "git" "dirhistory" "history" ];
     };
   };
-  users.users.${USERNAME}.defaultUserShell = pkgs.zsh;
+  users.users.${USERNAME}.shell = pkgs.zsh;
 
   environment.systemPackages = with pkgs; [
     git

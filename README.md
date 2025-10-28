@@ -33,7 +33,7 @@ Adjust defaults in flake.nix:
 ### Build Image
 
 ```
-nix build .#nixosConfigurations.khole.config.system.build.sdImage
+nix build .#nixosConfigurations.finite.config.system.build.sdImage
 ```
 
 ### Flash SD card
@@ -46,6 +46,10 @@ sync
 
 Boot the Pi. Pi-hole web UI should now resolve your existential dread.
 
+### Enable filtering
+
+Open your router configuration and wire it with Raspberry
+
 ## Notes
 
 Tested on Raspberry Pi 3 B+. Reports for other models welcome.
@@ -56,6 +60,7 @@ Tested on Raspberry Pi 3 B+. Reports for other models welcome.
 - [ ] Logo
 - [ ] Automated SD Flashing script
 - [ ] Backups for stats
+- [ ] Add router documentation
 
 ## License
 

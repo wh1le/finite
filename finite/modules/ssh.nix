@@ -1,6 +1,16 @@
-{ config, SSH_PORT, USERNAME, ...}:
+{ config, sops, self, SSH_PORT, USERNAME, ...}:
 
 {
+  sops.secrets = {
+    ssh_public_key = {
+      sopsFile = "${self}/secrets/default.yaml";
+      key = "ssh_public_key";
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+  };
+
   services.openssh = {
     enable = true;
     ports = [ SSH_PORT ];

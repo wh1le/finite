@@ -11,11 +11,13 @@
 
   outputs = { self, nixpkgs, nixpkgs-unstable, sops-nix, ... }@inputs:
     {
-      nixConfig = { extra-experimental-features = [ "nix-command" "flakes" ]; };
-      nixosConfigurations = {
-        system = "aarch64-linux";
+      nixConfig = {
+        extra-experimental-features = [ "nix-command" "flakes" ];
+      };
 
+      nixosConfigurations = {
         finite = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
           modules = [
             ./finite/configuration.nix
             inputs.sops-nix.nixosModules.sops
@@ -43,7 +45,7 @@
             TIMESYNCD_SERVERS = [ "162.159.200.1" "162.159.200.123" ];
 
             # Set ssh port
-            SSH_PORT = "1234";
+            SSH_PORT = 1234;
           };
         };
       };

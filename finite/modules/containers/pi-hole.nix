@@ -2,6 +2,8 @@
   config,
   lib,
   sops,
+  pkgs,
+  self,
   STATIC_IP,
   UNBOUND_PORT,
   ...
@@ -20,20 +22,32 @@ let
 
   pihole_image = pkgs.dockerTools.pullImage {
     imageName = "pihole/pihole";
-    imageDigest = DIGEST;
+    imageDigest = digest;
     finalImageName = "pihole/pihole";
     finalImageTag  = "latest";
     os   = "linux";
     arch = "arm64";
+    # Fixed-output hash for this image.
+    # If the build fails with a “got:” hash, replace this value with the one Nix prints.
+    sha256 = "sha256-vfY18TnW2A0zd/Q99fIVjEYBIQkJxpuHi6SGNHIE+oM=";
   };
 in
 {
   services.resolved.enable = false;
   services.dnsmasq.enable = lib.mkForce false;
 
-  sops.secrets.pihole_web_password.restartUnits = [
-    "podman-pi-hole.service"
-  ];
+  sops.secrets = {
+    pihole_web_password = {
+      sopsFile = "${self}/secrets/default.yaml";
+      key = "pihole_web_password";
+      owner = "root";
+      group = "root";
+      mode = "0400";
+      restartUnits = [
+        "podman-pi-hole.service"
+      ];
+    };
+  };
 
   networking.firewall.allowedTCPPorts = [ 53 80 ];
   networking.firewall.allowedUDPPorts = [ 53 67 ];
