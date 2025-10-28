@@ -18,19 +18,6 @@ _What_
 
 ### Environment variables
 
-Install Sops and generate your keys. Then edit secrets:
-
-```bash
-sops secrets/default.yaml
-```
-
-User password needs to be in hash form user this:
-
-```
-mkpasswd -m sha-512 "your password"
-# put output to secrets/default.yaml
-```
-
 Adjust defaults in flake.nix:
 
 - USERNAME - your user name
@@ -51,11 +38,32 @@ sudo dd if=result/sd-image/*.img of=/dev/sdX bs=4M status=progress conv=fsync
 sync
 ```
 
-Boot the Pi. Pi-hole web UI should now resolve your existential dread.
+### Boot Pi and connect
 
-### Enable filtering
+```
 
-Open your router configuration and wire it with Raspberry
+ssh -p 1234 astronaut@192.168.1.253
+```
+
+Change the very-trustworthy default password "hackme":
+
+```
+passwd
+```
+
+Pi-hole needs to download its blocklist once. It cannot resolve DNS yet because it is the DNS. Classic chicken-and-egg. We cheat. Point it at Cloudflare just long enough to fetch the list, then switch back to the privacy bunker.
+
+```
+sudo podman exec -it pi-hole sh -lc 'printf "nameserver 1.1.1.1\nnameserver 1.0.0.1\n" >/etc/resolv.conf && pihole -g && printf "nameserver 127.0.0.1\nnameserver ::1\noptions edns0 trust-ad\n" >/etc/resolv.conf'
+```
+
+Set your Pi-hole Web UI password before someone else does:
+
+```
+sudo podman exec -it pi-hole pihole setpassword your_new_password
+```
+
+Open the Pi-hole dashboard from your PC on 192.168.1.253. Enjoy ads disappearing like your faith in online privacy.
 
 ## Notes
 
@@ -63,7 +71,6 @@ Tested on Raspberry Pi 3 B+. Reports for other models welcome.
 
 ## Work in progress
 
-- [ ] Pi-hole filter defaults
 - [ ] Logo
 - [ ] Automated SD Flashing script
 - [ ] Backups for stats

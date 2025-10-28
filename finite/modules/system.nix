@@ -7,22 +7,11 @@
 
   console = {
     packages = [ pkgs.terminus_font ];
-    font = "ter-v32n";
+    font = "ter-v22n";
     keyMap = "us";
   };
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    enableBashCompletion = true;
-    autosuggestions.enable = true;
-    syntaxHighlighting.enable = true;
-    histSize = 10000;
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "git" "dirhistory" "history" ];
-    };
-  };
+  programs.zsh.enable = true;
   users.users.${USERNAME}.shell = pkgs.zsh;
 
   environment.systemPackages = with pkgs; [

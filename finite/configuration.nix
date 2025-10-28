@@ -1,8 +1,8 @@
 {
   modulesPath,
-  pkgs,
   TIMESYNCD_SERVERS,
   STATE_VERSION,
+  USERNAME,
   ...
 }:
 {
@@ -11,11 +11,30 @@
   services.timesyncd.enable = true;
   services.timesyncd.servers = TIMESYNCD_SERVERS;
 
+  hardware.bluetooth.enable = false;
+
+  home-manager.users.${USERNAME} = { pkgs, ... }: {
+
+    home.stateVersion = STATE_VERSION;
+    home.packages  = [ pkgs.zsh ];
+
+    programs.zsh = {
+      enable = true;
+      oh-my-zsh = {
+        enable = true;
+        theme = "robbyrussell";
+        plugins = [
+          "git"
+          "dirhistory"
+          "history"
+        ];
+      };
+    };
+  };
+
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./hardware-configuration.nix
-
-    ./modules/sops.nix
 
     ./modules/image.nix
     ./modules/network.nix
