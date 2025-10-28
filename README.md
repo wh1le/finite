@@ -14,43 +14,50 @@ _What_
 - Secrets and config neatly structured so tinkering stays painless.
 - Built with flakes so you can mutate your setup like a responsible mad scientist.
 
-## Building steps
+## Setup
 
-First you need to setup Sops and generate keys. After change secrets
-to match your configuration:
+### Environment variables
+
+Install Sops and generate your keys. Then edit secrets:
 
 ```bash
-$ sops secrets/default.yaml
+sops secrets/default.yaml
 ```
 
-Update default settings at flake.nix:
+Adjust defaults in flake.nix:
 
 - USERNAME - your user name
 - STATIC_IP - desired IP for your Raspberry PI
 - ROUTER_IP - your router IP you can run `ip r`
 
-Build Image:
+### Build Image
 
 ```
-$ nix build .#nixosConfigurations.khole.config.system.build.sdImage
+nix build .#nixosConfigurations.khole.config.system.build.sdImage
 ```
 
-Write image to SD card:
+### Flash SD card
 
 ```
-# User lsblk -f to find your card or flashdrive path
-$ sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_drive bs=4M status=progress conv=fsync
+lsblk -f   # find target disk
+sudo dd if=result/sd-image/*.img of=/dev/sdX bs=4M status=progress conv=fsync
+sync
 ```
+
+Boot the Pi. Pi-hole web UI should now resolve your existential dread.
 
 ## Notes
 
-I tested this build on Raspberry PI 3 B+ and it works flawlessly. Let me know how it runs on thers version of PI.
+Tested on Raspberry Pi 3 B+. Reports for other models welcome.
 
 ## Work in progress
 
-- [ ] Configure PI-hole filters
-- [ ] Add logo
+- [ ] Pi-hole filter defaults
+- [ ] Logo
+- [ ] Automated SD Flashing script
+- [ ] Backups for stats
 
 ## License
 
-MIT © 2025 Nikita Miloserdov — see [LICENSE](./LICENSE) for details.
+MIT © 2025 Nikita Miloserdov
+See [LICENSE](./LICENSE)
