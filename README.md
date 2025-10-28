@@ -36,7 +36,7 @@ I tested this build on Raspberry PI 3 B+ and it works flawlessly. Let me know ho
 
 ## Work in progress
 
-- [ ] Configure Raspberry PI filters
+- [ ] Configure PI-hole filters
 - [ ] Add logo
 
 ## License
