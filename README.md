@@ -1,6 +1,6 @@
 # Finite
 
-Finite is a NixOS configuration that ships Pi-hole + Unbound as a tiny fortress for your network. Drop it onto a Raspberry Pi and you get ad-blocking, DNS privacy, and smug self-hosting satisfaction with almost no effort.
+Finite is a NixOS configuration that ships Pi-hole + Unbound as a tiny fortress for your network. Drop it onto a Raspberry Pi and you get ad-blocking, DNS privacy, and self-hosting satisfaction with almost no effort.
 
 _Why_
 
