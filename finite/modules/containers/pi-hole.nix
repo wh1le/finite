@@ -31,6 +31,8 @@ let
       sleep 1
     done
 
+    # Pi-hole needs to download its blocklist once. It cannot resolve DNS yet because it is the DNS. Classic chicken-and-egg.
+    # We cheat. Point it at Cloudflare just long enough to fetch the default block list, then switch back to the privacy bunker.
     ${pkgs.podman}/bin/podman exec -i pi-hole sh -lc 'printf "nameserver 1.1.1.1\nnameserver 1.0.0.1\n" >/etc/resolv.conf'
     ${pkgs.podman}/bin/podman exec -i pi-hole pihole -g
     ${pkgs.podman}/bin/podman exec -i pi-hole sh -lc 'printf "nameserver 127.0.0.1\nnameserver ::1\noptions edns0 trust-ad\n" >/etc/resolv.conf'
@@ -43,16 +45,9 @@ in
   networking.firewall.allowedTCPPorts = [ 53 80 ];
   networking.firewall.allowedUDPPorts = [ 53 67 ];
 
-  systemd.tmpfiles.rules = [
-    "d /pi-hole/data/etc-pihole     0755 root root - -"
-    "d /pi-hole/data/etc-dnsmasq.d  0755 root root - -"
-  ];
-
   systemd.services.docker-pi-hole.after = [ "unbound.service" ];
   systemd.services.docker-pi-hole.requires = [ "unbound.service" ];
 
-  # Pi-hole needs to download its blocklist once. It cannot resolve DNS yet because it is the DNS. Classic chicken-and-egg.
-  # We cheat. Point it at Cloudflare just long enough to fetch the list, then switch back to the privacy bunker.
   systemd.services.pi-hole-postinit = {
     description = "One-time post-init inside pi-hole container";
     after = [ "podman-pi-hole.service" ];
@@ -71,6 +66,11 @@ in
       '';
     };
   };
+
+  systemd.tmpfiles.rules = [
+    "d /pi-hole/data/etc-pihole     0755 root root - -"
+    "d /pi-hole/data/etc-dnsmasq.d  0755 root root - -"
+  ];
 
   virtualisation.oci-containers.containers.pi-hole = {
     image = "pihole/pihole:latest";
