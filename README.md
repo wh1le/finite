@@ -9,10 +9,10 @@
         <img src="https://img.shields.io/badge/NixOS-25.05-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
     <a href="https://github.com/NLnetLabs/unbound">
-        <img src="https://img.shields.io/badge/Unbound-1.23.1-informational.svg?style=for-the-badge">
+        <img src="https://img.shields.io/badge/Unbound-1.23.1-informational.svg?style=for-the-badge&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
     <a href="https://github.com/pi-hole/pi-hole">
-        <img src="https://img.shields.io/badge/Pi--hole-6.2.1-informational.svg?style=for-the-badge&logo=pi-hole">
+        <img src="https://img.shields.io/badge/Pi--hole-6.2.1-informational.svg?style=for-the-badge&logo=pi-hole&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
 </p>
 
