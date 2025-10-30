@@ -30,7 +30,7 @@ _What_
 
 ### Environment variables
 
-Adjust defaults in flake.nix:
+Adjust defaults in ./flake.nix:
 
 | variables           | Example Value                                                             | Description                                                                                 |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
@@ -60,7 +60,6 @@ nix build .#nixosConfigurations.finite.config.system.build.sdImage
 1. **Find target disk:**
 
 ```
-
 # linux
 lsblk -f
 
@@ -114,7 +113,6 @@ So you’ve got your shiny little fortress running. Now make your router bow to 
 In your router admin panel, find **LAN → DNS Server** and set it to your Pi’s static IP:
 
 ```
-
  DNS 1 Server: 192.168.50.2
  DNS 2 Server: leave blank
 
@@ -127,15 +125,13 @@ That’s it. Your whole network now swears allegiance to Pi-hole.
 Some ISP routers think _you_ don’t deserve custom DNS. Fine. Outsmart them.
 
 - **Option A: Let Pi-hole run DHCP**
-
-_must be noted that it is not tested and probably needs additional tweaking. I recommend option B if you don't know what you are doing. Future support for DHCP might be added later._
+  _must be noted that it is not tested and probably needs additional tweaking. I recommend option B if you don't know what you are doing. Future support for DHCP might be added later._
 
 - Turn off DHCP on your router.
 - In Pi-hole’s web UI → _Settings → DHCP_ → enable it.
 - Now Pi-hole hands out IPs and DNS like a benevolent dictator.
 
 - **Option B: Use a real router**
-
   - Plug your own router into the ISP box.
   - Let _your_ router manage DHCP and DNS.
   - Keep the ISP router just to reach the internet.
@@ -146,7 +142,6 @@ _must be noted that it is not tested and probably needs additional tweaking. I r
 Run this from any client:
 
 ```
-
 nslookup github.com 192.168.50.2
 ```
 
@@ -156,7 +151,6 @@ Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real ti
 ### Blacklist management
 
 For curated and well-maintained DNS blacklists, start here:
-
 (hagezi/dns-blocklists)[https://github.com/hagezi/dns-blocklists]
 
 ## Notes
