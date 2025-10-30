@@ -115,7 +115,6 @@ In your router admin panel, find **LAN → DNS Server** and set it to your Pi’
 ```
  DNS 1 Server: 192.168.50.2
  DNS 2 Server: leave blank
-
 ```
 
 That’s it. Your whole network now swears allegiance to Pi-hole.
