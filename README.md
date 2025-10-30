@@ -1,7 +1,7 @@
 <h1 align="center">Finite</h1>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/wh1le/finite/master/assets/logo2.png" width="400" />
+  <img src="https://raw.githubusercontent.com/wh1le/finite/main/assets/logo2.png" width="400" />
 </p>
 
 <p align="center">
