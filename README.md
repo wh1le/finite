@@ -124,11 +124,12 @@ That’s it. Your whole network now swears allegiance to Pi-hole.
 Some ISP routers think _you_ don’t deserve custom DNS. Fine. Outsmart them.
 
 - **Option A: Let Pi-hole run DHCP**
+
   _must be noted that it is not tested and probably needs additional tweaking. I recommend option B if you don't know what you are doing. Future support for DHCP might be added later._
 
-- Turn off DHCP on your router.
-- In Pi-hole’s web UI → _Settings → DHCP_ → enable it.
-- Now Pi-hole hands out IPs and DNS like a benevolent dictator.
+  - Turn off DHCP on your router.
+  - In Pi-hole’s web UI → _Settings → DHCP_ → enable it.
+  - Now Pi-hole hands out IPs and DNS like a benevolent dictator.
 
 - **Option B: Use a real router**
   - Plug your own router into the ISP box.
