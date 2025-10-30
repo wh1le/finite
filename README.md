@@ -4,15 +4,27 @@ Finite is a NixOS configuration that ships Pi-hole + Unbound as a tiny fortress 
 
 _Why_
 
-- Your queries stay home. Zero blind trust in external DNS.
-- Ads and trackers get 404’d at the gate.
-- Everything is declarative. Change a line. Rebuild. Done.
+- **Your DNS stays local.**
+  Normally, every website you visit triggers a DNS request that goes to a company’s server like Google’s or your ISP’s giving them a complete log of what you browse.
+  With Finite, your Raspberry Pi handles those lookups locally. No external logging, no silent profiling.
+  Whether you’re a small business or an individual who values privacy, you keep control of your own data.
+
+- **Ads and trackers are blocked at the source**
+  Pi-hole filters out ad and tracking domains before they even reach your browser, so all your devices benefit automatically.
+
+- **It’s fully declarative.**
+  All settings live in clean configuration files. Change one line, rebuild, and your setup updates instantly and predictably no manual tweaks to remember.
 
 _What_
 
-- Clone repo. Set a few vars. Build SD image. Boot. Enjoy.
-- Secrets and config neatly structured so tinkering stays painless.
-- Built with flakes so you can mutate your setup like a responsible mad scientist.
+- **Clone, tweak, build, boot.**
+  Grab the repo, set a few variables, build the SD image, and start your Pi. That’s all it takes to get a private DNS and ad blocker running.
+
+- **Clean, organized configuration.**
+  Passwords, network settings, and services are separated and easy to adjust. No fragile scripts or hidden system files.
+
+- **Powered by Nix flakes.**
+  Everything is versioned and reproducible. You can safely experiment, roll back changes, or extend the system without breaking it perfect for curious tinkerers.
 
 ## Setup
 
