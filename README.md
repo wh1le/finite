@@ -135,7 +135,7 @@ In your router admin panel, find **LAN → DNS Server** and set it to your Pi’
 
 That’s it. Your whole network now swears allegiance to Pi-hole.
 
-#### 2. When your ISP router acts like a tyrant 👑
+#### 2. When your ISP router acts like a tyrant
 
 Some ISP routers think _you_ don’t deserve custom DNS. Fine. Outsmart them.
 
@@ -153,7 +153,7 @@ Some ISP routers think _you_ don’t deserve custom DNS. Fine. Outsmart them.
   - Keep the ISP router just to reach the internet.
   - Double NAT? Maybe. Freedom? Definitely.
 
-#### 3. Check your work 🔍
+#### 3. Check your work
 
 Run this from any client:
 
