@@ -167,7 +167,7 @@ Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real ti
 ### Blacklist management
 
 For curated and well-maintained DNS blacklists, start here:
-(hagezi/dns-blocklists)[https://github.com/hagezi/dns-blocklists]
+[hagezi/dns-blocklists](https://github.com/hagezi/dns-blocklists)
 
 ## Notes
 
