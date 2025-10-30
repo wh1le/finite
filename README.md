@@ -186,9 +186,7 @@ For other versions, adjust the SYSTEM variable in ./settings.nix to match your a
 
 ## Work in progress
 
-- [ ] Logo
 - [ ] Automatic backups for pi-hole stats
-- [ ] add router documentation
 
 ## License
 
