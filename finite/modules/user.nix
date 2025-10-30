@@ -1,14 +1,14 @@
-{ config, USERNAME, SSH_PUBLIC_KEY, self, ...}:
+{  settings, ...}:
 {
   users.mutableUsers = true;
 
-  users.users.${USERNAME} = {
+  users.users.${settings.USERNAME} = {
     isNormalUser = true;
 
-    password = "hackme";
+    password = settings.USER_PASSWORD;
 
     extraGroups = [ "wheel" "input" ];
 
-    openssh.authorizedKeys.keys = [ SSH_PUBLIC_KEY ];
+    openssh.authorizedKeys.keys = [ settings.SSH_PUBLIC_KEY ];
   };
 }

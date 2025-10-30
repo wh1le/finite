@@ -1,14 +1,11 @@
 {
   lib,
   pkgs,
-  STATIC_IP,
-  UNBOUND_PORT,
-  PIHOLE_PASSWORD,
+  settings,
   ...
 }:
 
 let
-
   # DNS is unavailable on first boot. Pi-hole tries to resolve during startup and fails.
   # Pre-pull the correct arm64 image to avoid any network lookups at runtime.
   # Reference digest with: docker manifest inspect pihole/pihole:latest
@@ -25,6 +22,19 @@ let
     # If the build fails with a “got:” hash, replace this value with the one Nix prints.
     sha256 = "sha256-vfY18TnW2A0zd/Q99fIVjEYBIQkJxpuHi6SGNHIE+oM=";
   };
+
+  postinit = pkgs.writeShellScript "pi-hole-postinit.sh" ''
+    set -euo pipefail
+
+    # wait until container is reachable
+    while ! ${pkgs.podman}/bin/podman exec -i pi-hole true 2>/dev/null; do
+      sleep 1
+    done
+
+    ${pkgs.podman}/bin/podman exec -i pi-hole sh -lc 'printf "nameserver 1.1.1.1\nnameserver 1.0.0.1\n" >/etc/resolv.conf'
+    ${pkgs.podman}/bin/podman exec -i pi-hole pihole -g
+    ${pkgs.podman}/bin/podman exec -i pi-hole sh -lc 'printf "nameserver 127.0.0.1\nnameserver ::1\noptions edns0 trust-ad\n" >/etc/resolv.conf'
+'';
 in
 {
   services.resolved.enable = false;
@@ -38,6 +48,30 @@ in
     "d /pi-hole/data/etc-dnsmasq.d  0755 root root - -"
   ];
 
+  systemd.services.docker-pi-hole.after = [ "unbound.service" ];
+  systemd.services.docker-pi-hole.requires = [ "unbound.service" ];
+
+  # Pi-hole needs to download its blocklist once. It cannot resolve DNS yet because it is the DNS. Classic chicken-and-egg.
+  # We cheat. Point it at Cloudflare just long enough to fetch the list, then switch back to the privacy bunker.
+  systemd.services.pi-hole-postinit = {
+    description = "One-time post-init inside pi-hole container";
+    after = [ "podman-pi-hole.service" ];
+    requires = [ "podman-pi-hole.service" ];
+    wantedBy = [ "multi-user.target" ];
+
+    # run only once
+    unitConfig.ConditionPathExists = "!/var/lib/pi-hole-postinit.stamp";
+
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${postinit}";
+      ExecStartPost = ''
+        ${pkgs.coreutils}/bin/mkdir -p /var/lib
+        ${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp
+      '';
+    };
+  };
+
   virtualisation.oci-containers.containers.pi-hole = {
     image = "pihole/pihole:latest";
     imageFile = pihole_image;
@@ -49,10 +83,9 @@ in
     ];
 
     environment = {
-      TZ = "Europe/London";
+      TZ = settings.TIMEZONE;
       DNSMASQ_USER = "root";
-      FTLCONF_dns_upstreams = "${STATIC_IP}#${UNBOUND_PORT}";
-      WEBPASSWORD = PIHOLE_PASSWORD;
+      FTLCONF_dns_upstreams = "${settings.STATIC_IP}#${settings.UNBOUND_PORT}";
     };
 
     extraOptions = [

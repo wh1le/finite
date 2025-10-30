@@ -20,28 +20,56 @@ _What_
 
 Adjust defaults in flake.nix:
 
-- USERNAME - your user name
-- STATIC_IP - desired IP for your Raspberry PI
-- ROUTER_IP - your router IP you can run `ip r`
+| variables           | Example Value                                                             | Description                                                                                 |
+| ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `STATE_VERSION`     | `"25.05"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
+| `SYSTEM`            | `"aarch64-linux"`                                                         | Target architecture for the Raspberry Pi (ARMv8 64-bit).                                    |
+| `USERNAME`          | `"astronaut"`                                                             | Default system user created during image build.                                             |
+| `USER_PASSWORD`     | `"hackme"`                                                                | Default password for the system user (must be changed after first login).                   |
+| `SSH_PORT`          | `1234`                                                                    | Port number for incoming SSH connections.                                                   |
+| `SSH_PUBLIC_KEY`    | `"ssh-rsa AAAA..."`                                                       | Authorized SSH public key for passwordless login.                                           |
+| `TIMEZONE`          | `"Europe/Lisbon"`                                                         | System timezone configuration.                                                              |
+| `ROUTER_IP`         | `"192.168.50.1"`                                                          | IP address of the network’s router/gateway for DNS and routing configuration.               |
+| `STATIC_IP`         | `"192.168.50.2"`                                                          | Fixed IP assigned to the Raspberry Pi host.                                                 |
+| `TIMESYNCD_SERVERS` | `[ "162.159.200.1" "162.159.200.123" ]`                                   | NTP servers used for initial time synchronization to prevent Unbound TLS errors.            |
+| `UNBOUND_SUBNETS`   | `[ "127.0.0.1/32 allow" "192.168.1.0/24 allow" "192.168.50.0/24 allow" ]` | CIDR blocks with access control rules for Unbound (which clients can query the DNS server). |
+| `UNBOUND_PORT`      | `"5335"`                                                                  | Listening port for the Unbound DNS resolver.                                                |
 
 ### Build Image
 
 ```
+make build_image
+# or
 nix build .#nixosConfigurations.finite.config.system.build.sdImage
 ```
 
 ### Flash SD card
 
+1. **Find target disk:**
+
 ```
-lsblk -f   # find target disk
-sudo dd if=result/sd-image/*.img of=/dev/sdX bs=4M status=progress conv=fsync
-sync
+
+# linux
+lsblk -f
+
+# macOS
+diskutil list
+```
+
+2. **Write image:**
+
+```
+# linux
+sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_disk_name bs=4M status=progress conv=fsync
+
+# macOS
+diskutil unmountDisk /dev/your_disk_name
+sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_disk_name bs=4M status=progress conv=fsync
 ```
 
 ### Boot Pi and connect
 
 ```
-
 ssh -p 1234 astronaut@192.168.1.253
 ```
 
@@ -51,30 +79,91 @@ Change the very-trustworthy default password "hackme":
 passwd
 ```
 
-Pi-hole needs to download its blocklist once. It cannot resolve DNS yet because it is the DNS. Classic chicken-and-egg. We cheat. Point it at Cloudflare just long enough to fetch the list, then switch back to the privacy bunker.
-
-```
-sudo podman exec -it pi-hole sh -lc 'printf "nameserver 1.1.1.1\nnameserver 1.0.0.1\n" >/etc/resolv.conf && pihole -g && printf "nameserver 127.0.0.1\nnameserver ::1\noptions edns0 trust-ad\n" >/etc/resolv.conf'
-```
-
 Set your Pi-hole Web UI password before someone else does:
 
 ```
 sudo podman exec -it pi-hole pihole setpassword your_new_password
 ```
 
-Open the Pi-hole dashboard from your PC on 192.168.1.253. Enjoy ads disappearing like your faith in online privacy.
+Open the Pi-hole dashboard from your PC at your configured IP address STATIC_IP/admin, for example:
+
+```
+http://192.168.50.2/admin
+```
+
+Enjoy watching ads vanish faster than your faith in online privacy.
+
+### Router Configuration
+
+So you’ve got your shiny little fortress running. Now make your router bow to it.
+
+#### 1. Point your router’s DNS to Pi-hole
+
+In your router admin panel, find **LAN → DNS Server** and set it to your Pi’s static IP:
+
+```
+
+ DNS 1 Server: 192.168.50.2
+ DNS 2 Server: leave blank
+
+```
+
+That’s it. Your whole network now swears allegiance to Pi-hole.
+
+#### 2. When your ISP router acts like a tyrant 👑
+
+Some ISP routers think _you_ don’t deserve custom DNS. Fine. Outsmart them.
+
+- **Option A: Let Pi-hole run DHCP**
+
+_must be noted that it is not tested and probably needs additional tweaking. I recommend option B if you don't know what you are doing. Future support for DHCP might be added later._
+
+- Turn off DHCP on your router.
+- In Pi-hole’s web UI → _Settings → DHCP_ → enable it.
+- Now Pi-hole hands out IPs and DNS like a benevolent dictator.
+
+- **Option B: Use a real router**
+
+  - Plug your own router into the ISP box.
+  - Let _your_ router manage DHCP and DNS.
+  - Keep the ISP router just to reach the internet.
+  - Double NAT? Maybe. Freedom? Definitely.
+
+#### 3. Check your work 🔍
+
+Run this from any client:
+
+```
+
+nslookup github.com 192.168.50.2
+```
+
+If it answers, Pi-hole reigns supreme.  
+Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real time.
+
+### Blacklist management
+
+For curated and well-maintained DNS blacklists, start here:
+
+(hagezi/dns-blocklists)[https://github.com/hagezi/dns-blocklists]
 
 ## Notes
 
-Tested on Raspberry Pi 3 B+. Reports for other models welcome.
+Tested on Raspberry Pi 3 B+. Reports for other models are welcome.
+Expected to work on:
+
+- Pi 2 v1.2 and later
+- Pi 3
+- Pi 4
+- Pi 5 → ARMv8
+
+For other versions, adjust the SYSTEM variable in ./settings.nix to match your architecture, and share your results if it works.
 
 ## Work in progress
 
 - [ ] Logo
-- [ ] Automated SD Flashing script
-- [ ] Backups for stats
-- [ ] Add router documentation
+- [ ] Automatic backups for pi-hole stats
+- [ ] add router documentation
 
 ## License
 

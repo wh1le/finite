@@ -1,9 +1,9 @@
-{pkgs, USERNAME, ...}
+{pkgs, settings, ...}
 :
 {
 
   services.displayManager.enable = false;
-  services.getty.autologinUser = USERNAME;
+  services.getty.autologinUser = settings.USERNAME;
 
   console = {
     packages = [ pkgs.terminus_font ];
@@ -12,7 +12,7 @@
   };
 
   programs.zsh.enable = true;
-  users.users.${USERNAME}.shell = pkgs.zsh;
+  users.users.${settings.USERNAME}.shell = pkgs.zsh;
 
   environment.systemPackages = with pkgs; [
     git

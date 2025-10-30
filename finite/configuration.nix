@@ -1,21 +1,18 @@
 {
   modulesPath,
-  TIMESYNCD_SERVERS,
-  STATE_VERSION,
-  USERNAME,
+  settings,
   ...
 }:
 {
-  system.stateVersion = STATE_VERSION;
+  system.stateVersion = settings.STATE_VERSION;
 
   services.timesyncd.enable = true;
-  services.timesyncd.servers = TIMESYNCD_SERVERS;
+  services.timesyncd.servers = settings.TIMESYNCD_SERVERS;
 
   hardware.bluetooth.enable = false;
 
-  home-manager.users.${USERNAME} = { pkgs, ... }: {
-
-    home.stateVersion = STATE_VERSION;
+  home-manager.users.${settings.USERNAME} = { pkgs, ... }: {
+    home.stateVersion = settings.STATE_VERSION;
     home.packages  = [ pkgs.zsh ];
 
     programs.zsh = {

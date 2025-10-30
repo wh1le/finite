@@ -1,4 +1,4 @@
-{lib, STATIC_IP, ROUTER_IP, UNBOUND_PORT, ...}:
+{lib, settings, ...}:
 
 {
   networking.hostName = "finite";
@@ -11,7 +11,7 @@
 
   # Lock ip address
   networking.defaultGateway = {
-    address = ROUTER_IP;
+    address = settings.ROUTER_IP;
     interface = "eth0";
   };
 
@@ -22,7 +22,7 @@
 
     ipv4.addresses = [
       {
-        address = STATIC_IP;
+        address = settings.STATIC_IP;
         prefixLength = 24;
       }
     ];

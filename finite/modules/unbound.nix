@@ -1,6 +1,5 @@
 {
-  STATIC_IP,
-  UNBOUND_PORT,
+  settings,
   ...
 }:
 {
@@ -8,10 +7,10 @@
     enable = true;
     settings = {
       server = {
-        interface = [ "127.0.0.1" STATIC_IP ];
-        port = UNBOUND_PORT;
+        interface = [ "127.0.0.1" settings.STATIC_IP ];
+        port = settings.UNBOUND_PORT;
 
-        access-control = [ "127.0.0.1/32 allow" "192.168.1.0/24 allow" ];
+        access-control = settings.UNBOUND_SUBNETS;
 
         # Based on recommended settings in https://docs.pi-hole.net/guides/dns/unbound/#configure-unbound
         harden-glue = true;
