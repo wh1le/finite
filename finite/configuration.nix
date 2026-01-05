@@ -28,9 +28,9 @@
     };
   };
 
-  nix.settings.trusted-public-keys = [
-    "homepc:Zs+sokjN2dgbDQ4SbUH7zOw2I0E2Y/n+cilERPuZQFc="
-  ];
+  # You can use trusted keys for deployment for extra security
+  # nix.settings.trusted-public-keys = [ settings.TRUSTED_PUBLIC_KEYS ];
+  nix.settings.require-sigs = false;
 
   nix.settings.trusted-users = [ "root" settings.USERNAME ];
 
