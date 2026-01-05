@@ -2,7 +2,7 @@
   STATE_VERSION = "25.05";
   SYSTEM = "aarch64-linux";
 
-  USERNAME = "pi-hole";
+  USERNAME = "astronaut";
   USER_PASSWORD = "hackme";
 
   SSH_PORT = 1234;

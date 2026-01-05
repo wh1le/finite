@@ -46,17 +46,13 @@ _What_
 
 ### Environment variables
 
-```
-cp settings.example.nix settings.nix
-```
-
 Adjust defaults in ./settings.nix:
 
 | variables           | Example Value                                                             | Description                                                                                 |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `STATE_VERSION`     | `"25.11"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
 | `SYSTEM`            | `"aarch64-linux"`                                                         | Target architecture for the Raspberry Pi (ARMv8 64-bit).                                    |
-| `USERNAME`          | `"pi-hole"`                                                             | Default system user created during image build.                                             |
+| `USERNAME`          | `"pi-hole"`                                                               | Default system user created during image build.                                             |
 | `USER_PASSWORD`     | `"hackme"`                                                                | Default password for the system user (must be changed after first login).                   |
 | `SSH_PORT`          | `1234`                                                                    | Port number for incoming SSH connections.                                                   |
 | `SSH_PUBLIC_KEY`    | `"ssh-rsa AAAA..."`                                                       | Authorized SSH public key for passwordless login.                                           |
@@ -177,7 +173,7 @@ Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real ti
 ### 4. Deployment
 
 ```bash
-nix run github:serokell/deploy-rs -- ".#finite"
+nixos-rebuild switch --flake path:.#finite --target-host pi-hole@raspbery_pi_api --sudo --ask-sudo-password
 ```
 
 builds locally and copies the closure to the Pi since it can be too weak for Nix builds.

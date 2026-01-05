@@ -7,11 +7,9 @@
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    deploy-rs.url = "github:serokell/deploy-rs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, deploy-rs, ... }@inputs:
+  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
     let
       settings = import ./settings.nix;
     in
@@ -30,16 +28,6 @@
           specialArgs = {
             inherit self inputs settings;
           };
-        };
-      };
-
-      deploy.nodes.finite = {
-        hostname = settings.STATIC_IP;
-        sshUser = settings.USERNAME;
-        sshOpts = [ "-p" (toString settings.SSH_PORT) ];
-        profiles.system = {
-          user = "root";
-          path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.finite;
         };
       };
     };

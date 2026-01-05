@@ -81,8 +81,11 @@ in
       TZ = settings.TIMEZONE;
       DNSMASQ_USER = "root";
       FTLCONF_dns_upstreams = "${settings.STATIC_IP}#${settings.UNBOUND_PORT}";
-      FTLCONF_rate_limit = "10000/60";
-      QUERY_LOGGING = "false";
+
+      FTLCONF_dns_queryLogging = "false";
+      FTLCONF_dns_rateLimit_count = "10000";
+      FTLCONF_dns_rateLimit_interval = "60";
+      FTLCONF_misc_privacylevel = "3";
     };
 
     extraOptions = [
