@@ -1,9 +1,4 @@
-{
-  lib,
-  pkgs,
-  settings,
-  ...
-}:
+{ lib, pkgs, settings, ... }:
 
 let
   # DNS is unavailable on first boot. Pi-hole tries to resolve during startup and fails.
@@ -15,8 +10,8 @@ let
     imageName = "pihole/pihole";
     imageDigest = digest;
     finalImageName = "pihole/pihole";
-    finalImageTag  = "latest";
-    os   = "linux";
+    finalImageTag = "latest";
+    os = "linux";
     arch = "arm64";
 
     # If the build fails with a “got:” hash, replace this value with the one Nix prints.
@@ -36,7 +31,7 @@ let
     ${pkgs.podman}/bin/podman exec -i pi-hole sh -lc 'printf "nameserver 1.1.1.1\nnameserver 1.0.0.1\n" >/etc/resolv.conf'
     ${pkgs.podman}/bin/podman exec -i pi-hole pihole -g
     ${pkgs.podman}/bin/podman exec -i pi-hole sh -lc 'printf "nameserver 127.0.0.1\nnameserver ::1\noptions edns0 trust-ad\n" >/etc/resolv.conf'
-'';
+  '';
 in
 {
   services.resolved.enable = false;
@@ -86,6 +81,7 @@ in
       TZ = settings.TIMEZONE;
       DNSMASQ_USER = "root";
       FTLCONF_dns_upstreams = "${settings.STATIC_IP}#${settings.UNBOUND_PORT}";
+      FTLCONF_rate_limit = "10000/60";
     };
 
     extraOptions = [

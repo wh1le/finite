@@ -184,6 +184,8 @@ For other versions, adjust the SYSTEM variable in ./settings.nix to match your a
 ## Work in progress
 
 - [ ] Automatic backups for pi-hole stats
+- [ ] Add luks encryption
+- [ ] Deploy with colmena
 
 ## License
 
