@@ -52,7 +52,7 @@ Adjust defaults in ./flake.nix:
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `STATE_VERSION`     | `"25.05"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
 | `SYSTEM`            | `"aarch64-linux"`                                                         | Target architecture for the Raspberry Pi (ARMv8 64-bit).                                    |
-| `USERNAME`          | `"astronaut"`                                                             | Default system user created during image build.                                             |
+| `USERNAME`          | `"pi-hole"`                                                             | Default system user created during image build.                                             |
 | `USER_PASSWORD`     | `"hackme"`                                                                | Default password for the system user (must be changed after first login).                   |
 | `SSH_PORT`          | `1234`                                                                    | Port number for incoming SSH connections.                                                   |
 | `SSH_PUBLIC_KEY`    | `"ssh-rsa AAAA..."`                                                       | Authorized SSH public key for passwordless login.                                           |
@@ -88,6 +88,7 @@ diskutil list
 ```
 # linux
 sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_disk_name bs=4M status=progress conv=fsync
+sync
 
 # macOS
 diskutil unmountDisk /dev/your_disk_name
@@ -97,7 +98,7 @@ sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_disk_name bs=4M st
 ### Boot Pi and connect
 
 ```
-ssh -p 1234 astronaut@192.168.1.253
+ssh -p 1234 pi-hole@192.168.1.253
 ```
 
 Change the very-trustworthy default password "hackme":
