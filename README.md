@@ -46,7 +46,11 @@ _What_
 
 ### Environment variables
 
-Adjust defaults in ./flake.nix:
+```
+cp settings.example.nix settings.nix
+```
+
+Adjust defaults in ./settings.nix:
 
 | variables           | Example Value                                                             | Description                                                                                 |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
