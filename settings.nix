@@ -1,9 +1,9 @@
-{ ...}:
+{ ... }:
 {
   STATE_VERSION = "25.05";
   SYSTEM = "aarch64-linux";
 
-  USERNAME = "astronaut";
+  USERNAME = "pi-hole";
   USER_PASSWORD = "hackme";
 
   SSH_PORT = 1234;
