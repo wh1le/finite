@@ -1,6 +1,4 @@
-{ settings
-, ...
-}:
+{ settings, ... }:
 {
   services.unbound = {
     enable = true;
@@ -38,16 +36,24 @@
         prefetch = true;
         edns-buffer-size = 1232;
 
+        harden-below-nxdomain = true;
+        harden-referral-path = true;
+        qname-minimisation = true;
+
         # Custom settings
         hide-identity = true;
         hide-version = true;
 
+        so-sndbuf = 0;
+        so-rcvbuf = 0;
+
         # Zero log
         verbosity = 0;
+
         log-queries = "no";
         log-replies = "no";
         log-servfail = "no";
-
+        log-local-actions = "no";
       };
       forward-zone = [
         {
