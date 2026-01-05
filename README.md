@@ -190,9 +190,9 @@ For other versions, adjust the SYSTEM variable in ./settings.nix to match your a
 
 ## Work in progress
 
-- [ ] Automatic backups for pi-hole stats
-- [ ] Add luks encryption
-- [ ] Deploy with colmena
+- [x] Automatic backups for pi-hole stats (skipped, do not log activity)
+- [x] Add luks encryption (skipped, replace with no logging)
+- [x] Remote deployment from host
 
 ## License
 
