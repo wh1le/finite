@@ -142,7 +142,6 @@ Some ISP routers think _you_ don’t deserve custom DNS. Fine. Outsmart them.
 - **Option A: Let Pi-hole run DHCP**
 
   _must be noted that it is not tested and probably needs additional tweaking. I recommend option B if you don't know what you are doing. Future support for DHCP might be added later._
-
   - Turn off DHCP on your router.
   - In Pi-hole’s web UI → _Settings → DHCP_ → enable it.
   - Now Pi-hole hands out IPs and DNS like a benevolent dictator.
@@ -163,6 +162,14 @@ nslookup github.com 192.168.50.2
 
 If it answers, Pi-hole reigns supreme.  
 Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real time.
+
+### 4. Deployment
+
+```bash
+nix run github:serokell/deploy-rs -- .#finite --remote-build false
+```
+
+`--remote-build false` builds locally and copies the closure to the Pi—critical since Pi 3 B+ is too weak for Nix builds.
 
 ### Blacklist management
 
