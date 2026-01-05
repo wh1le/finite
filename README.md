@@ -113,6 +113,12 @@ Set your Pi-hole Web UI password before someone else does:
 sudo podman exec -it pi-hole pihole setpassword your_new_password
 ```
 
+Update database:
+
+```
+sudo podman exec pi-hole pihole -g
+```
+
 Open the Pi-hole dashboard from your PC at your configured IP address STATIC_IP/admin, for example:
 
 ```
