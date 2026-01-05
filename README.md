@@ -166,10 +166,10 @@ Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real ti
 ### 4. Deployment
 
 ```bash
-nix run github:serokell/deploy-rs -- .#finite --remote-build false
+nix run github:serokell/deploy-rs -- ".#finite"
 ```
 
-`--remote-build false` builds locally and copies the closure to the Pi—critical since Pi 3 B+ is too weak for Nix builds.
+builds locally and copies the closure to the Pi since it can be too weak for Nix builds.
 
 ### Blacklist management
 

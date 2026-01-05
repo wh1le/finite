@@ -35,8 +35,8 @@
 
       deploy.nodes.finite = {
         hostname = settings.STATIC_IP;
-        sshUser = "wh1le";
-        sshOpts = [ "-p" "1234" ];
+        sshUser = settings.USERNAME;
+        sshOpts = [ "-p" (toString settings.SSH_PORT) ];
         profiles.system = {
           user = "root";
           path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.finite;

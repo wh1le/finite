@@ -82,6 +82,7 @@ in
       DNSMASQ_USER = "root";
       FTLCONF_dns_upstreams = "${settings.STATIC_IP}#${settings.UNBOUND_PORT}";
       FTLCONF_rate_limit = "10000/60";
+      QUERY_LOGGING = "false";
     };
 
     extraOptions = [

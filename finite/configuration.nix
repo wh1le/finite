@@ -1,7 +1,6 @@
-{
-  modulesPath,
-  settings,
-  ...
+{ modulesPath
+, settings
+, ...
 }:
 {
   system.stateVersion = settings.STATE_VERSION;
@@ -13,7 +12,7 @@
 
   home-manager.users.${settings.USERNAME} = { pkgs, ... }: {
     home.stateVersion = settings.STATE_VERSION;
-    home.packages  = [ pkgs.zsh ];
+    home.packages = [ pkgs.zsh ];
 
     programs.zsh = {
       enable = true;
@@ -28,6 +27,8 @@
       };
     };
   };
+
+  nix.settings.trusted-users = [ "root" settings.USERNAME ];
 
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
