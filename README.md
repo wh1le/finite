@@ -6,7 +6,7 @@
 
 <p align="center">
     <a href="https://nixos.org/">
-        <img src="https://img.shields.io/badge/NixOS-25.05-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
+        <img src="https://img.shields.io/badge/NixOS-25.11-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
     <a href="https://github.com/pi-hole/pi-hole">
         <img src="https://img.shields.io/badge/Pi--hole-6.2.1-informational.svg?style=for-the-badge&logo=pi-hole&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
@@ -50,7 +50,7 @@ Adjust defaults in ./flake.nix:
 
 | variables           | Example Value                                                             | Description                                                                                 |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `STATE_VERSION`     | `"25.05"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
+| `STATE_VERSION`     | `"25.11"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
 | `SYSTEM`            | `"aarch64-linux"`                                                         | Target architecture for the Raspberry Pi (ARMv8 64-bit).                                    |
 | `USERNAME`          | `"pi-hole"`                                                             | Default system user created during image build.                                             |
 | `USER_PASSWORD`     | `"hackme"`                                                                | Default password for the system user (must be changed after first login).                   |
