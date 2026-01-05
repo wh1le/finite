@@ -1,5 +1,7 @@
 { settings, ... }:
 {
+  systemd.services.unbound.restartIfChanged = true;
+
   services.unbound = {
     enable = true;
     settings = {
@@ -55,13 +57,11 @@
         log-servfail = "no";
         log-local-actions = "no";
       };
+
       forward-zone = [
         {
           name = ".";
-          forward-addr = [
-            "9.9.9.9@853#dns.quad9.net"
-            "149.112.112.112@853#dns.quad9.net"
-          ];
+          forward-addr = settings.PRIVATE_DNS_SERVERS;
           forward-tls-upstream = true;
         }
       ];

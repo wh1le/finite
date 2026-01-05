@@ -26,5 +26,16 @@
     "192.168.1.0/24 allow"
     "192.168.50.0/24 allow"
   ];
+
+  # Example for Quad9
+  # forward-addr = [
+  #   "9.9.9.9@853#dns.quad9.net"
+  #   "149.112.112.112@853#dns.quad9.net"
+  # ];
+
+  PRIVATE_DNS_SERVERS = [
+    "185.213.155.123@853#de-fra-dns-001.mullvad.net"
+  ];
+
   UNBOUND_PORT = "5335";
 }
