@@ -28,6 +28,10 @@
     };
   };
 
+  nix.settings.trusted-public-keys = [
+    "homepc:Zs+sokjN2dgbDQ4SbUH7zOw2I0E2Y/n+cilERPuZQFc="
+  ];
+
   nix.settings.trusted-users = [ "root" settings.USERNAME ];
 
   imports = [
