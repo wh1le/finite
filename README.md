@@ -1,9 +1,6 @@
-<h1 align="center">Finite</h1>
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/wh1le/finite/main/assets/logo2_trimmed.png?v=2" width="400" />
 </p>
-
 <p align="center">
     <a href="https://nixos.org/">
         <img src="https://img.shields.io/badge/NixOS-25.11-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
@@ -15,6 +12,8 @@
         <img src="https://img.shields.io/badge/Unbound-1.23.1-informational.svg?style=for-the-badge&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
 </p>
+
+<h1 align="center">Finite</h1>
 
 Finite is a plug-and-play NixOS configuration for Raspberry Pi bundling [Pi-hole](https://github.com/pi-hole/pi-hole) + [Unbound](https://github.com/NLnetLabs/unbound) into a tiny network fortress. Just flash, boot, and enjoy ad-blocking and DNS privacy—no manual setup required.
 
