@@ -16,7 +16,7 @@
     </a>
 </p>
 
-Finite is a NixOS configuration that ships Pi-hole + Unbound as a tiny fortress for your network. Drop it onto a Raspberry Pi and you get ad-blocking, DNS privacy, and self-hosting satisfaction with almost no effort.
+Finite is a plug-and-play NixOS configuration for Raspberry Pi bundling [Pi-hole](https://github.com/pi-hole/pi-hole) + [Unbound](https://github.com/NLnetLabs/unbound) into a tiny network fortress. Just flash, boot, and enjoy ad-blocking and DNS privacy—no manual setup required.
 
 _Why_
 
@@ -42,7 +42,16 @@ _What_
 - **Powered by Nix flakes.**
   Everything is versioned and reproducible. You can safely experiment, roll back changes, or extend the system without breaking it perfect for curious tinkerers.
 
+## Hardware
+
+- [Raspberry Pi](https://www.raspberrypi.com/) (3B+ or newer)
+- 5V 3A power supply
+- Ethernet cable
+- SD card (8GB+)
+
 ## Setup
+
+Not on NixOS? See [Installing Nix](doc/install-nix.md) first.
 
 ### Environment variables
 
