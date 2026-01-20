@@ -15,7 +15,13 @@
 
 <h1 align="center">Finite</h1>
 
-Finite is a plug-and-play NixOS configuration for Raspberry Pi bundling [Pi-hole](https://github.com/pi-hole/pi-hole) + [Unbound](https://github.com/NLnetLabs/unbound) into a tiny network fortress. Just flash, boot, and enjoy ad-blocking and DNS privacy—no manual setup required. Check out full [Blog deep-dive](https://wh1le.com/finite)
+<p align="center">
+    <a href="https://wh1le.com/dns-privacy-raspberry-pi" target="_blank">DNS Privacy on Raspberry Pi</a>
+    &nbsp;•&nbsp;
+    <a href="https://wh1le.com/finite" target="_blank">Project Deep-Dive</a>
+</p>
+
+Finite is a plug-and-play NixOS configuration for Raspberry Pi bundling [Pi-hole](https://github.com/pi-hole/pi-hole) + [Unbound](https://github.com/NLnetLabs/unbound) into a tiny network fortress. Just flash, boot, and enjoy ad-blocking and DNS privacy—no manual setup required.
 
 _Why_
 
