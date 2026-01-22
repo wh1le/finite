@@ -11,6 +11,9 @@
     <a href="https://github.com/NLnetLabs/unbound">
         <img src="https://img.shields.io/badge/Unbound-1.23.1-informational.svg?style=for-the-badge&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
+    <a href="https://ko-fi.com/wh1le">
+        <img src="https://img.shields.io/badge/Ko--fi-Support-9B7EDE?style=for-the-badge&logo=ko-fi&logoColor=D9E0EE&labelColor=302D41">
+    </a>
 </p>
 
 <h1 align="center">Finite</h1>
