@@ -22,6 +22,10 @@ jobs:
       - name: Check flake evaluation
         run: nix flake check --no-build --all-systems
 
+      - name: Lint with statix
+        run: nix run nixpkgs#statix -- check .
+        continue-on-error: true
+
   build:
     name: Build NixOS configuration
     runs-on: ubuntu-latest
