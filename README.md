@@ -14,6 +14,12 @@
     <a href="https://ko-fi.com/wh1le">
         <img src="https://img.shields.io/badge/Ko--fi-Support-9B7EDE?style=for-the-badge&logo=ko-fi&logoColor=D9E0EE&labelColor=302D41">
     </a>
+    <a href="https://github.com/wh1le/finite/actions/workflows/ci.yml">
+        <img src="https://img.shields.io/github/actions/workflow/status/wh1le/finite/ci.yml?branch=main&style=for-the-badge&logo=github&label=CI%20main&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
+    </a>
+    <a href="https://github.com/wh1le/finite/releases/latest">
+        <img src="https://img.shields.io/github/v/release/wh1le/finite?style=for-the-badge&logo=github&label=release&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
+    </a>
 </p>
 
 <h1 align="center">Finite</h1>
