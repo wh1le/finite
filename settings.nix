@@ -1,4 +1,6 @@
 {
+  VERSION = "1.0.0";
+
   STATE_VERSION = "25.05";
   SYSTEM = "aarch64-linux";
 
