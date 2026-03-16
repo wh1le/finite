@@ -82,6 +82,26 @@ Adjust defaults in ./settings.nix:
 
 ### Build Image
 
+Since the image targets `aarch64-linux`, building from an `x86_64` machine requires QEMU user-mode emulation.
+
+**On NixOS**, add this to your host configuration and rebuild:
+
+```nix
+boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+```
+
+**On other Linux distros**, install QEMU user-mode emulation:
+
+```bash
+# Debian/Ubuntu
+sudo apt install qemu-user-static binfmt-support
+
+# Arch Linux
+sudo pacman -S qemu-user-static qemu-user-static-binfmt
+```
+
+Then build:
+
 ```
 make build_image
 # or
