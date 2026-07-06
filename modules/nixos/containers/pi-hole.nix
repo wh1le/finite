@@ -9,7 +9,7 @@ let
   # DNS is unavailable on first boot. Pi-hole tries to resolve during startup and fails.
   # Pre-pull the correct arm64 image to avoid any network lookups at runtime.
   # Reference digest with: docker manifest inspect pihole/pihole:latest
-  digest = "sha256:ce924bd4f4439509a619c7a9002a5ebcceced98fc1866d991f929c3ebecd976a";
+  digest = "sha256:8ea95136e7c8c15b42d88eadf1a3875421aa1be30ad39e50f661188cc986fb27";
 
   pihole_image = pkgs.dockerTools.pullImage {
     imageName = "pihole/pihole";
@@ -20,7 +20,7 @@ let
     arch = "arm64";
 
     # If the build fails with a “got:” hash, replace this value with the one Nix prints.
-    sha256 = "sha256-vfY18TnW2A0zd/Q99fIVjEYBIQkJxpuHi6SGNHIE+oM=";
+    sha256 = "sha256-30AFF0RIpIPdCSukDcJNIJaASFLHA1CbGY+rqPS2WQA=";
   };
 
   postinit = pkgs.writeShellScript "pi-hole-postinit.sh" ''
