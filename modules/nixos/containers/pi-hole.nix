@@ -1,4 +1,9 @@
-{ lib, pkgs, settings, ... }:
+{
+  lib,
+  pkgs,
+  settings,
+  ...
+}:
 
 let
   # DNS is unavailable on first boot. Pi-hole tries to resolve during startup and fails.
@@ -37,28 +42,40 @@ in
   services.resolved.enable = false;
   services.dnsmasq.enable = lib.mkForce false;
 
-  networking.firewall.allowedTCPPorts = [ 53 80 ];
-  networking.firewall.allowedUDPPorts = [ 53 67 ];
+  networking.firewall = {
+    allowedTCPPorts = [
+      53
+      80
+    ];
+    allowedUDPPorts = [
+      53
+      67
+    ];
+  };
 
-  systemd.services.docker-pi-hole.after = [ "unbound.service" ];
-  systemd.services.docker-pi-hole.requires = [ "unbound.service" ];
+  systemd.services = {
+    docker-pi-hole = {
+      after = [ "unbound.service" ];
+      requires = [ "unbound.service" ];
+    };
 
-  systemd.services.pi-hole-postinit = {
-    description = "One-time post-init inside pi-hole container";
-    after = [ "podman-pi-hole.service" ];
-    requires = [ "podman-pi-hole.service" ];
-    wantedBy = [ "multi-user.target" ];
+    pi-hole-postinit = {
+      description = "One-time post-init inside pi-hole container";
+      after = [ "podman-pi-hole.service" ];
+      requires = [ "podman-pi-hole.service" ];
+      wantedBy = [ "multi-user.target" ];
 
-    # run only once
-    unitConfig.ConditionPathExists = "!/var/lib/pi-hole-postinit.stamp";
+      # run only once
+      unitConfig.ConditionPathExists = "!/var/lib/pi-hole-postinit.stamp";
 
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${postinit}";
-      ExecStartPost = ''
-        ${pkgs.coreutils}/bin/mkdir -p /var/lib
-        ${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp
-      '';
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${postinit}";
+        ExecStartPost = ''
+          ${pkgs.coreutils}/bin/mkdir -p /var/lib
+          ${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp
+        '';
+      };
     };
   };
 
