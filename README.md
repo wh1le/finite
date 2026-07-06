@@ -3,7 +3,7 @@
 </p>
 <p align="center">
     <a href="https://nixos.org/">
-        <img src="https://img.shields.io/badge/NixOS-25.11-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
+        <img src="https://img.shields.io/badge/NixOS-26.05-informational.svg?style=for-the-badge&logo=nixos&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
     </a>
     <a href="https://github.com/pi-hole/pi-hole">
         <img src="https://img.shields.io/badge/Pi--hole-6.2.1-informational.svg?style=for-the-badge&logo=pi-hole&color=F2CDCD&logoColor=D9E0EE&labelColor=302D41">
@@ -75,7 +75,7 @@ Adjust defaults in ./settings.nix:
 
 | variables           | Example Value                                                             | Description                                                                                 |
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `STATE_VERSION`     | `"25.11"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
+| `STATE_VERSION`     | `"25.05"`                                                                 | NixOS release first installed with. Set once and leave it; to update, bump the channel, not this. |
 | `SYSTEM`            | `"aarch64-linux"`                                                         | Target architecture for the Raspberry Pi (ARMv8 64-bit).                                    |
 | `USERNAME`          | `"pi-hole"`                                                               | Default system user created during image build.                                             |
 | `USER_PASSWORD`     | `"hackme"`                                                                | Default password for the system user (must be changed after first login).                   |
@@ -228,6 +228,25 @@ builds locally and copies the closure to the Pi since it can be too weak for Nix
 For curated and well-maintained DNS blacklists, start here:
 [hagezi/dns-blocklists](https://github.com/hagezi/dns-blocklists)
 
+## Updating
+
+```bash
+git pull
+nix flake update
+sudo nixos-rebuild switch --flake .#finite
+```
+
+Keeps pi-hole data. Roll back with `nixos-rebuild switch --rollback`.
+Don't touch `STATE_VERSION` — bump the channel, not this.
+
+Bump pi-hole to the latest image:
+
+```bash
+nix run nixpkgs#crane -- digest pihole/pihole:latest
+```
+
+Put the digest in `modules/nixos/containers/pi-hole.nix`, blank the `sha256`, rebuild once, paste the hash Nix prints.
+
 ## Notes
 
 Tested on Raspberry Pi 3 B+. Reports for other models are welcome.
@@ -237,8 +256,6 @@ Expected to work on:
 - Pi 3
 - Pi 4
 - Pi 5 → ARMv8
-
-For other versions, adjust the SYSTEM variable in ./settings.nix to match your architecture, and share your results if it works.
 
 ## Work in progress
 

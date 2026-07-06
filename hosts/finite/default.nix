@@ -1,6 +1,7 @@
-{ modulesPath
-, settings
-, ...
+{
+  modulesPath,
+  settings,
+  ...
 }:
 {
   system.stateVersion = settings.STATE_VERSION;
@@ -32,22 +33,25 @@
   # nix.settings.trusted-public-keys = [ settings.TRUSTED_PUBLIC_KEYS ];
   nix.settings.require-sigs = false;
 
-  nix.settings.trusted-users = [ "root" settings.USERNAME ];
+  nix.settings.trusted-users = [
+    "root"
+    settings.USERNAME
+  ];
 
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./hardware-configuration.nix
 
-    ./modules/image.nix
-    ./modules/network.nix
-    ./modules/system.nix
-    ./modules/ssh.nix
-    ./modules/unbound.nix
-    ./modules/user.nix
-    ./modules/virtualisation.nix
-    ./modules/firewall.nix
-    ./modules/locales.nix
+    ../../modules/nixos/image.nix
+    ../../modules/nixos/network.nix
+    ../../modules/nixos/system.nix
+    ../../modules/nixos/ssh.nix
+    ../../modules/nixos/unbound.nix
+    ../../modules/nixos/user.nix
+    ../../modules/nixos/virtualisation.nix
+    ../../modules/nixos/firewall.nix
+    ../../modules/nixos/locales.nix
 
-    ./modules/containers/pi-hole.nix
+    ../../modules/nixos/containers/pi-hole.nix
   ];
 }
