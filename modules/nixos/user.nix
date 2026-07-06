@@ -1,4 +1,4 @@
-{  settings, ...}:
+{ settings, ... }:
 {
   users.mutableUsers = true;
 
@@ -7,7 +7,10 @@
 
     password = settings.USER_PASSWORD;
 
-    extraGroups = [ "wheel" "input" ];
+    extraGroups = [
+      "wheel"
+      "input"
+    ];
 
     openssh.authorizedKeys.keys = [ settings.SSH_PUBLIC_KEY ];
   };

@@ -6,7 +6,10 @@
     enable = true;
     settings = {
       server = {
-        interface = [ "127.0.0.1" settings.STATIC_IP ];
+        interface = [
+          "127.0.0.1"
+          settings.STATIC_IP
+        ];
         port = settings.UNBOUND_PORT;
 
         access-control = settings.UNBOUND_SUBNETS;

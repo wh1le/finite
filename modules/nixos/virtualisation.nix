@@ -1,4 +1,4 @@
-{ settings, ...}:
+{ settings, ... }:
 {
   virtualisation = {
     docker = {
@@ -15,5 +15,8 @@
     oci-containers.backend = "podman";
   };
 
-  users.users.${settings.USERNAME}.extraGroups = [ "docker" "kvm" ];
+  users.users.${settings.USERNAME}.extraGroups = [
+    "docker"
+    "kvm"
+  ];
 }
