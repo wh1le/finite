@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 let
   defaultLocale = "en_US.UTF-8";
   extraLocales = [ "en_US.UTF-8/UTF-8" ];
@@ -25,6 +25,4 @@ in
 
     inherit extraLocales defaultLocale;
   };
-
-  environment.systemPackages = with pkgs; [ hunspellDicts.en_US ];
 }
