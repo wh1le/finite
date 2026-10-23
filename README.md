@@ -77,15 +77,15 @@ Adjust defaults in ./settings.nix:
 | ------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | `STATE_VERSION`     | `"25.11"`                                                                 | NixOS release version to maintain compatibility with Nix modules.                           |
 | `SYSTEM`            | `"aarch64-linux"`                                                         | Target architecture for the Raspberry Pi (ARMv8 64-bit).                                    |
-| `USERNAME`          | `"pi-hole"`                                                               | Default system user created during image build.                                             |
+| `USERNAME`          | `"astronaut"`                                                               | Default system user created during image build.                                             |
 | `USER_PASSWORD`     | `"hackme"`                                                                | Default password for the system user (must be changed after first login).                   |
 | `SSH_PORT`          | `1234`                                                                    | Port number for incoming SSH connections.                                                   |
-| `SSH_PUBLIC_KEY`    | `"ssh-rsa AAAA..."`                                                       | Authorized SSH public key for passwordless login.                                           |
+| `SSH_PUBLIC_KEY`    | `"ssh-ed25519 AAAA..."`                                                   | Your SSH public key. Required, the build fails without it and password login is off.       |
 | `TIMEZONE`          | `"Europe/Lisbon"`                                                         | System timezone configuration.                                                              |
 | `ROUTER_IP`         | `"192.168.50.1"`                                                          | IP address of the network’s router/gateway for DNS and routing configuration.               |
 | `STATIC_IP`         | `"192.168.50.2"`                                                          | Fixed IP assigned to the Raspberry Pi host.                                                 |
 | `TIMESYNCD_SERVERS` | `[ "162.159.200.1" "162.159.200.123" ]`                                   | NTP servers used for initial time synchronization to prevent Unbound TLS errors.            |
-| `UNBOUND_SUBNETS`   | `[ "127.0.0.1/32 allow" "192.168.1.0/24 allow" "192.168.50.0/24 allow" ]` | CIDR blocks with access control rules for Unbound (which clients can query the DNS server). |
+| `UNBOUND_SUBNETS`   | `[ "127.0.0.1/32 allow" "192.168.50.0/24 allow" ]`                        | CIDR blocks with access control rules for Unbound (which clients can query the DNS server). |
 | `UNBOUND_PORT`      | `"5335"`                                                                  | Listening port for the Unbound DNS resolver.                                                |
 
 ### Build Image
@@ -143,7 +143,7 @@ sudo dd if=./result/sd-image/your_image_name.img of=/dev/your_disk_name bs=4M st
 ### Boot Pi and connect
 
 ```
-ssh -p 1234 pi-hole@192.168.1.253
+ssh -p 1234 astronaut@192.168.50.2
 ```
 
 Change the very-trustworthy default password "hackme":
@@ -218,7 +218,7 @@ Then open the Pi-hole dashboard → _Query Log_ → watch the ads die in real ti
 ### 4. Deployment
 
 ```bash
-nixos-rebuild switch --flake path:.#finite --target-host pi-hole@raspbery_pi_api --sudo --ask-sudo-password
+nixos-rebuild switch --flake path:.#finite --target-host astronaut@192.168.50.2 --sudo --ask-sudo-password
 ```
 
 builds locally and copies the closure to the Pi since it can be too weak for Nix builds.
