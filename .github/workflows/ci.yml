@@ -19,6 +19,9 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
 
+      - name: Use a throwaway ssh key, settings.nix ships without one
+        run: sed -i 's|SSH_PUBLIC_KEY = ""|SSH_PUBLIC_KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ci"|' settings.nix
+
       - name: Check flake evaluation
         run: nix flake check --no-build --all-systems
 
@@ -44,6 +47,9 @@ jobs:
         uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
+
+      - name: Use a throwaway ssh key, settings.nix ships without one
+        run: sed -i 's|SSH_PUBLIC_KEY = ""|SSH_PUBLIC_KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ci"|' settings.nix
 
       - name: Build finite system
         run: |
