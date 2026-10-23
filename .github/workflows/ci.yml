@@ -79,3 +79,39 @@ jobs:
           name: vulnix-report
           path: vulnix.txt
           retention-days: 30
+
+  image-drift:
+    name: Pi-hole image drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Compare the pinned digest with pihole/pihole:latest for linux/arm64
+        run: |
+          set -euo pipefail
+          pinned=$(sed -n 's/.*digest = "\(sha256:[0-9a-f]*\)".*/\1/p' finite/modules/containers/pi-hole.nix)
+          token=$(curl -fsSL 'https://auth.docker.io/token?service=registry.docker.io&scope=repository:pihole/pihole:pull' | jq -r .token)
+          reg=https://registry-1.docker.io/v2/pihole/pihole
+          accept='application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json'
+          latest=$(curl -fsSL -H "Authorization: Bearer $token" -H "Accept: $accept" "$reg/manifests/latest" \
+            | jq -r '.manifests[] | select(.platform.os == "linux" and .platform.architecture == "arm64") | .digest')
+          version() {
+            local config
+            config=$(curl -fsSL -H "Authorization: Bearer $token" -H "Accept: $accept" "$reg/manifests/$1" | jq -r .config.digest)
+            curl -fsSL -H "Authorization: Bearer $token" "$reg/blobs/$config" | jq -r '.config.Labels["org.opencontainers.image.version"] // "unknown"'
+          }
+          {
+            echo '## Pi-hole image'
+            echo "| | version | digest |"
+            echo "|---|---|---|"
+            echo "| pinned | $(version "$pinned") | \`$pinned\` |"
+            echo "| latest arm64 | $(version "$latest") | \`$latest\` |"
+            if [ "$pinned" = "$latest" ]; then
+              echo
+              echo 'Up to date.'
+            else
+              echo
+              echo 'Behind. Update `digest` and `sha256` in finite/modules/containers/pi-hole.nix.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
