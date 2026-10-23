@@ -55,10 +55,10 @@ in
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "${postinit}";
-      ExecStartPost = ''
-        ${pkgs.coreutils}/bin/mkdir -p /var/lib
-        ${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp
-      '';
+      ExecStartPost = [
+        "${pkgs.coreutils}/bin/mkdir -p /var/lib"
+        "${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp"
+      ];
     };
   };
 
