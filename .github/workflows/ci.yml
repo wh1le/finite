@@ -63,9 +63,10 @@ jobs:
             --system aarch64-linux \
             --print-build-logs
 
-      - name: Scan for CVEs with vulnix
+      - name: Scan the built closure with vulnix
         run: |
-          nix run nixpkgs#vulnix -- --system ./result | tee vulnix.txt || true
+          nix build nixpkgs#vulnix -o vulnix-bin
+          ./vulnix-bin/bin/vulnix ./result 2>&1 | tee vulnix.txt || true
           {
             echo '## vulnix'
             echo '```'
