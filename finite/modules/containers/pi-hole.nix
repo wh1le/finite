@@ -79,7 +79,7 @@ in
 
     environment = {
       TZ = settings.TIMEZONE;
-      DNSMASQ_USER = "root";
+      DNSMASQ_USER = "pihole";
       FTLCONF_dns_upstreams = "${settings.STATIC_IP}#${settings.UNBOUND_PORT}";
 
       FTLCONF_dns_queryLogging = "false";
