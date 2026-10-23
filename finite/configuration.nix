@@ -10,6 +10,14 @@
 
   hardware.bluetooth.enable = false;
 
+  # CVE-2026-111943: distrust roots that issued compromised eMudhra intermediates.
+  security.pki.caCertificateBlacklist = [
+    "Comodo AAA Services root"
+    "emSign ECC Root CA - G3"
+    "emSign Root CA - C1"
+    "emSign ECC Root CA - C3"
+  ];
+
   home-manager.users.${settings.USERNAME} = { pkgs, ... }: {
     home.stateVersion = settings.STATE_VERSION;
     home.packages = [ pkgs.zsh ];
