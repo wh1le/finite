@@ -14,10 +14,6 @@
       settings = import ./settings.nix;
     in
     {
-      nixConfig = {
-        extra-experimental-features = [ "nix-command" "flakes" ];
-      };
-
       nixosConfigurations = {
         finite = nixpkgs.lib.nixosSystem {
           system = settings.SYSTEM;

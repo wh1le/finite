@@ -8,7 +8,8 @@
   USER_PASSWORD = "hackme";
 
   SSH_PORT = 1234;
-  SSH_PUBLIC_KEY = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJDc8RAeF+LoThFl5ArIVRVB2MRFbaG2nTGiXI3mayA7 wh1le@homepc";
+  # Required. Password login over ssh is off, this key is the only way in.
+  SSH_PUBLIC_KEY = "";
 
   TIMEZONE = "Europe/Lisbon";
 
@@ -25,7 +26,6 @@
 
   UNBOUND_SUBNETS = [
     "127.0.0.1/32 allow"
-    "192.168.1.0/24 allow"
     "192.168.50.0/24 allow"
   ];
 

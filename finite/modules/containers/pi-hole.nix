@@ -40,8 +40,8 @@ in
   networking.firewall.allowedTCPPorts = [ 53 80 ];
   networking.firewall.allowedUDPPorts = [ 53 67 ];
 
-  systemd.services.docker-pi-hole.after = [ "unbound.service" ];
-  systemd.services.docker-pi-hole.requires = [ "unbound.service" ];
+  systemd.services.podman-pi-hole.after = [ "unbound.service" ];
+  systemd.services.podman-pi-hole.requires = [ "unbound.service" ];
 
   systemd.services.pi-hole-postinit = {
     description = "One-time post-init inside pi-hole container";
@@ -55,10 +55,10 @@ in
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "${postinit}";
-      ExecStartPost = ''
-        ${pkgs.coreutils}/bin/mkdir -p /var/lib
-        ${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp
-      '';
+      ExecStartPost = [
+        "${pkgs.coreutils}/bin/mkdir -p /var/lib"
+        "${pkgs.coreutils}/bin/touch /var/lib/pi-hole-postinit.stamp"
+      ];
     };
   };
 
@@ -79,7 +79,7 @@ in
 
     environment = {
       TZ = settings.TIMEZONE;
-      DNSMASQ_USER = "root";
+      DNSMASQ_USER = "pihole";
       FTLCONF_dns_upstreams = "${settings.STATIC_IP}#${settings.UNBOUND_PORT}";
 
       FTLCONF_dns_queryLogging = "false";
