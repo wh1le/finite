@@ -63,10 +63,19 @@ jobs:
             --system aarch64-linux \
             --print-build-logs
 
+      - name: Keep the NVD feeds between runs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: nvd
+          key: nvd-feeds-${{ github.run_id }}
+          restore-keys: nvd-feeds-
+
       - name: Scan the built closure with vulnix
         run: |
           nix build nixpkgs#vulnix -o vulnix-bin
-          ./vulnix-bin/bin/vulnix ./result 2>&1 | tee vulnix.txt || true
+          .github/scripts/nvd-mirror.sh nvd || echo "mirror incomplete, vulnix will say which feed is missing"
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory nvd >/dev/null 2>&1 &
+          ./vulnix-bin/bin/vulnix --mirror http://127.0.0.1:8000/ ./result 2>&1 | tee vulnix.txt || true
           {
             echo '## vulnix'
             echo '```'
