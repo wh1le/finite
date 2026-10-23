@@ -1,5 +1,4 @@
-{pkgs, settings, ...}
-:
+{ pkgs, settings, ... }:
 {
 
   services.displayManager.enable = false;

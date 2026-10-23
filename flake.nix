@@ -2,27 +2,35 @@
   description = "Finite. Privacy-focused DNS on Raspberry Pi using NixOS, Unbound, and Pi-hole";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-unstable, home-manager, ... }@inputs:
+  nixConfig = {
+    extra-experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+  };
+
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
     let
       settings = import ./settings.nix;
     in
     {
-      nixConfig = {
-        extra-experimental-features = [ "nix-command" "flakes" ];
-      };
-
       nixosConfigurations = {
         finite = nixpkgs.lib.nixosSystem {
           system = settings.SYSTEM;
           modules = [
-            ./finite/configuration.nix
+            ./hosts/finite/default.nix
             home-manager.nixosModules.home-manager
           ];
           specialArgs = {
