@@ -40,8 +40,8 @@ in
   networking.firewall.allowedTCPPorts = [ 53 80 ];
   networking.firewall.allowedUDPPorts = [ 53 67 ];
 
-  systemd.services.docker-pi-hole.after = [ "unbound.service" ];
-  systemd.services.docker-pi-hole.requires = [ "unbound.service" ];
+  systemd.services.podman-pi-hole.after = [ "unbound.service" ];
+  systemd.services.podman-pi-hole.requires = [ "unbound.service" ];
 
   systemd.services.pi-hole-postinit = {
     description = "One-time post-init inside pi-hole container";
