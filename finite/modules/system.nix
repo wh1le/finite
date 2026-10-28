@@ -3,7 +3,6 @@
 {
 
   services.displayManager.enable = false;
-  services.getty.autologinUser = settings.USERNAME;
 
   console = {
     packages = [ pkgs.terminus_font ];
