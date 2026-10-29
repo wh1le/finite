@@ -5,15 +5,26 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:
     name: Flake check
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: cachix/install-nix-action@v30
+      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
@@ -33,10 +44,11 @@ jobs:
     name: Build NixOS configuration
     runs-on: ubuntu-latest
     needs: check
+    timeout-minutes: 90
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
-      - uses: cachix/install-nix-action@v30
+      - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
@@ -44,7 +56,7 @@ jobs:
             extra-platforms = aarch64-linux
 
       - name: Set up QEMU for aarch64 emulation
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
         with:
           platforms: arm64
 
@@ -57,6 +69,65 @@ jobs:
             --system aarch64-linux \
             --print-build-logs
 
-      - name: Scan for CVEs with vulnix
-        run: nix run nixpkgs#vulnix -- --system ./result
-        continue-on-error: true
+      - name: Keep the NVD feeds between runs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: nvd
+          key: nvd-feeds-${{ github.run_id }}
+          restore-keys: nvd-feeds-
+
+      - name: Scan the built closure with vulnix
+        run: |
+          nix build nixpkgs#vulnix -o vulnix-bin
+          .github/scripts/nvd-mirror.sh nvd || echo "mirror incomplete, vulnix will say which feed is missing"
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory nvd >/dev/null 2>&1 &
+          ./vulnix-bin/bin/vulnix --mirror http://127.0.0.1:8000/ ./result 2>&1 | tee vulnix.txt || true
+          {
+            echo '## vulnix'
+            echo '```'
+            cat vulnix.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep the vulnix report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: vulnix-report
+          path: vulnix.txt
+          retention-days: 30
+
+  image-drift:
+    name: Pi-hole image drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Compare the pinned digest with pihole/pihole:latest for linux/arm64
+        run: |
+          set -euo pipefail
+          pinned=$(sed -n 's/.*digest = "\(sha256:[0-9a-f]*\)".*/\1/p' finite/modules/containers/pi-hole.nix)
+          token=$(curl -fsSL 'https://auth.docker.io/token?service=registry.docker.io&scope=repository:pihole/pihole:pull' | jq -r .token)
+          reg=https://registry-1.docker.io/v2/pihole/pihole
+          accept='application/vnd.oci.image.index.v1+json, application/vnd.docker.distribution.manifest.list.v2+json, application/vnd.oci.image.manifest.v1+json'
+          latest=$(curl -fsSL -H "Authorization: Bearer $token" -H "Accept: $accept" "$reg/manifests/latest" \
+            | jq -r '.manifests[] | select(.platform.os == "linux" and .platform.architecture == "arm64") | .digest')
+          version() {
+            local config
+            config=$(curl -fsSL -H "Authorization: Bearer $token" -H "Accept: $accept" "$reg/manifests/$1" | jq -r .config.digest)
+            curl -fsSL -H "Authorization: Bearer $token" "$reg/blobs/$config" | jq -r '.config.Labels["org.opencontainers.image.version"] // "unknown"'
+          }
+          {
+            echo '## Pi-hole image'
+            echo "| | version | digest |"
+            echo "|---|---|---|"
+            echo "| pinned | $(version "$pinned") | \`$pinned\` |"
+            echo "| latest arm64 | $(version "$latest") | \`$latest\` |"
+            if [ "$pinned" = "$latest" ]; then
+              echo
+              echo 'Up to date.'
+            else
+              echo
+              echo 'Behind. Update `digest` and `sha256` in finite/modules/containers/pi-hole.nix.'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
